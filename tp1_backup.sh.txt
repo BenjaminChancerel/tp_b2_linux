@@ -1,0 +1,18 @@
+#!/bin/sh
+
+#cbenjamin
+#28/09/2020
+#script de sauvegarde pour les sites qu'on a fait 
+
+#fichiers à sauvegarder qu'on rentre en argument
+backup_file="$(basename $1)"
+
+#on veut mettre les sauvegardes dans ce dossier 
+destination=".backup"
+
+#récupérer la date
+date=$(date "+%Y%m%d_%H%M")
+archive="${backup_file}_${date}.tar.gz"
+
+#la ou il va chercher ce qu'on veut sauvegarder 
+backup_file_path="${1}"
