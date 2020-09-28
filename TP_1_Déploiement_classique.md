@@ -496,3 +496,19 @@ index du deuxième site
 [cbenjamin@node2 ~]$
 ```
 donc on vient de prouver que node 2 peut joindre les sites en http et https
+
+## II. Script de sauvegarde 
+
+je vais créer le fichier du script, un dossier sauvegarde et enfin deux dossier site1 et site2 dans sauvegarde :
+
+```
+[cbenjamin@node1 ~]$ touch tp1_backup.sh
+[cbenjamin@node1 ~]$ mkdir sauvegarde
+[cbenjamin@node1 ~]$ mkdir sauvegarde/site1
+[cbenjamin@node1 ~]$ mkdir sauvegarde//site2
+[cbenjamin@node1 ~]$ cd sauvegarde/
+[cbenjamin@node1 sauvegarde]$ ls
+site1  site2
+[cbenjamin@node1 sauvegarde]$
+```
+
