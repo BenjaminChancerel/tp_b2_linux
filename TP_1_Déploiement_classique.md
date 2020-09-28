@@ -512,3 +512,85 @@ site1  site2
 [cbenjamin@node1 sauvegarde]$
 ```
 
+### III. Monitoring, alerting
+
+j'installe netdate avec cette commande : ``bash <(curl -Ss https://my-netdata.io/kickstart.sh)``
+
+ensuite j'ouvre le port avec la commande suivante :
+```
+[cbenjamin@node1 ~]$ sudo firewall-cmd --add-port=19999/tcp --permanent
+success
+[cbenjamin@node1 ~]$
+```
+
+on crée un webhook dans un serveur discord.
+
+on modifie le fichier ``/etc/netdata/edit-config health_alarm_notify.conf`` 
+et on met dans la ligne ``DISCORD_WEBHOOK_URL=""`` le lien de notre webhook 
+soit https://discordapp.com/api/webhooks/760160345380749361/e51F87xXEZ58YSGAddkx5WWugAG3Mj0k99aKms9TOsMhM1CQ8mqGRvWyVimVcToNChz4 pur le miens
+
+et enfin on modifie le fichier conf de nginx : 
+
+```
+worker_processes 1;
+error_log nginx_error.log;
+events {
+    worker_connections 1024;
+}
+
+http {
+     server {
+        listen 80;
+
+        server_name node1.tp1.b2;
+
+        location / {
+                return 301 /site1;
+        }
+
+        location /site1 {
+                alias /srv/site1;
+        }
+
+        location /site2 {
+                alias /srv/site2;
+        }
+}
+
+server {
+        listen 443 ssl;
+
+        server_name node1.tp1.b2;
+        ssl_certificate server.crt;
+        ssl_certificate_key server.key;
+
+        location / {
+            return 301 /site1;
+        }
+
+        location /site1 {
+            alias /srv/site1;
+        }
+        location /site2 {
+            alias /srv/site2;
+        }
+        location ~ /netdata/(?<ndpath>.*) {
+            proxy_redirect off;
+            proxy_set_header Host $host;
+
+            proxy_set_header X-Forwarded-Host $host;
+            proxy_set_header X-Forwarded-Server $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_http_version 1.1;
+            proxy_pass_request_headers on;
+            proxy_set_header Connection "keep-alive";
+            proxy_store off;
+            proxy_pass http://netdata/$ndpath$is_args$args;
+
+            gzip on;
+            gzip_proxied any;
+            gzip_types *;
+        }
+    }
+}
+```
