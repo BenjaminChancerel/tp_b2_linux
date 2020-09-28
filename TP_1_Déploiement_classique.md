@@ -318,62 +318,181 @@ Node2 : 192.168.1.7
 
 ## I. Setup serveur web 
 
-__Pour Node1 :__
 
-_site1_
+j'ai installer nginx sur les deux vms en faisant un ``sudo yum update`` puis ```sudo yum install epel-release```et enfin le famuex ``sudo yum install nginx``
+
+on le démarre ``sudo systemctl start nginx ``
+
+On crée les index.html :
+
 ```
-[cbenjamin@node1 ~]$ sudo ls -al /srv/site1
-total 20
-drw-r--r--. 3 root      root       4096 24 sept. 16:46 .
+[cbenjamin@node1 ~]$ sudo touch /srv/site1/index.html
+[cbenjamin@node1 ~]$ sudo touch /srv/site2/index.html
+```
+
+dans les fichiers de site1 et site 2 j'ai rentré respectivement :
+
+``index du premier site``
+
+``index du deuxième site``
+
+
+
+op on met les perms :
+```
+[cbenjamin@node1 ~]$ sudo chmod -R 755 /srv/site1/
+[cbenjamin@node1 ~]$ sudo chmod -R 755 /srv/site2/
+```
+
+on attribut les dossier à un utilisateur et un groupe : 
+```
+[cbenjamin@node1 ~]$ sudo chown -R cbenjamin:cbenjamin /srv/site1
+[cbenjamin@node1 ~]$ sudo chown -R cbenjamin:cbenjamin /srv/site2
+```
+
+vérifs :
+
+```
+[cbenjamin@node1 ~]$ ls -al /srv/site1
+total 24
+drwxr-xr-x. 3 cbenjamin cbenjamin  4096 28 sept. 14:53 .
 drwxr-xr-x. 4 root      root         32 24 sept. 14:33 ..
--rw-r--r--. 1 cbenjamin cbenjamin     0 24 sept. 16:46 index.html
-drwx------. 2 root      root      16384 24 sept. 14:31 lost+found
-[cbenjamin@node1 ~]$
-```
-
-_site2_
-```
+-rwxr-xr-x. 1 cbenjamin cbenjamin    22 28 sept. 14:53 index.html
+drwxr-xr-x. 2 cbenjamin cbenjamin 16384 24 sept. 14:31 lost+found
 [cbenjamin@node1 ~]$ ls -al /srv/site2
-ls: impossible d'accéder à /srv/site2/..: Permission non accordée
-ls: impossible d'accéder à /srv/site2/lost+found: Permission non accordée
-ls: impossible d'accéder à /srv/site2/.: Permission non accordée
-ls: impossible d'accéder à /srv/site2/index.html: Permission non accordée
-total 0
-d????????? ? ? ? ?              ? .
-d????????? ? ? ? ?              ? ..
--????????? ? ? ? ?              ? index.html
-d????????? ? ? ? ?              ? lost+found
-[cbenjamin@node1 ~]$ sudo !!
-sudo ls -al /srv/site2
-total 20
-drw-r--r--. 3 root      root       4096 24 sept. 16:46 .
+total 24
+drwxr-xr-x. 3 cbenjamin cbenjamin  4096 28 sept. 14:53 .
 drwxr-xr-x. 4 root      root         32 24 sept. 14:33 ..
--rw-r--r--. 1 cbenjamin cbenjamin     0 24 sept. 16:46 index.html
-drwx------. 2 root      root      16384 24 sept. 14:31 lost+found
+-rwxr-xr-x. 1 cbenjamin cbenjamin    24 28 sept. 14:53 index.html
+drwxr-xr-x. 2 cbenjamin cbenjamin 16384 24 sept. 14:31 lost+found
+[cbenjamin@node1 ~]$
+```
+le propriétaire est cbenjamin 
+le groupe est cbenjamin 
+cbenjamin peut lire, écrire et exécuter dans le fichier. les autres ne peuvent que le lire et l'exécuter 
+
+
+Ensuite on va ouvrir les ports :
+```
+[cbenjamin@node1 ~]$ sudo firewall-cmd --zone=public --add-service=http
+success
+[cbenjamin@node1 ~]$ sudo firewall-cmd --zone=public --add-service=https
+success
 [cbenjamin@node1 ~]$
 ```
 
-__Pour node2:__
-
-_site1_
+bon on va génèrer notre certificat pour https :
 ```
-[cbenjamin@node2 ~]$ sudo ls -al /srv/site1
-total 20
-drw-r--r--. 3 root      root       4096 24 sept. 16:47 .
-drwxr-xr-x. 4 root      root         32 24 sept. 14:33 ..
--rw-r--r--. 1 cbenjamin cbenjamin     0 24 sept. 16:47 index.html
-drwx------. 2 root      root      16384 24 sept. 14:31 lost+found
+[cbenjamin@node1 ~]$ openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -keyout server.key -out server.crt
+Generating a 2048 bit RSA private key
+............................................+++
+...................................................................................+++
+writing new private key to 'server.key'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:
+State or Province Name (full name) []:
+Locality Name (eg, city) [Default City]:
+Organization Name (eg, company) [Default Company Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (eg, your name or your server's hostname) []:node1.tp1.b2
+Email Address []:
+[cbenjamin@node1 ~]$
+```
+
+et op on les mouv : 
+```
+[cbenjamin@node1 ~]$ sudo mv server.crt /etc/nginx/
+[sudo] Mot de passe de cbenjamin : 
+[cbenjamin@node1 ~]$ sudo mv server.key /etc/nginx/
+```
+
+Voici mon fichier conf pour nginx :
+```
+[cbenjamin@node1 ~]$ sudo vim /etc/nginx/nginx.conf
+[cbenjamin@node1 ~]$ cat /etc/nginx/nginx.conf
+worker_processes 1;
+error_log nginx_error.log;
+events {
+    worker_connections 1024;
+}
+
+http {
+     server {
+        listen 80;
+
+        server_name node1.tp1.b2;
+
+        location / {
+                return 301 /site1;
+        }
+
+        location /site1 {
+                alias /srv/site1;
+        }
+
+        location /site2 {
+                alias /srv/site2;
+        }
+}
+
+server {
+        listen 443 ssl;
+
+        server_name node1.tp1.b2;
+        ssl_certificate server.crt;
+        ssl_certificate_key server.key;
+
+        location / {
+            return 301 /site1;
+        }
+
+        location /site1 {
+            alias /srv/site1;
+        }
+        location /site2 {
+            alias /srv/site2;
+        }
+    }
+}
+[cbenjamin@node1 ~]$
+```
+
+Maintenant on va se connecter aux 2 sites avec node2 :
+
+__site 1__: 
+```
+[cbenjamin@node2 ~]$ curl -L node1.tp1.b2/site1
+index du premier site
 [cbenjamin@node2 ~]$
 ```
 
-_site2_
-
+__site 2__:
 ```
-[cbenjamin@node2 ~]$ sudo ls -al /srv/site2
-total 20
-drw-r--r--. 3 root      root       4096 24 sept. 16:48 .
-drwxr-xr-x. 4 root      root         32 24 sept. 14:33 ..
--rw-r--r--. 1 cbenjamin cbenjamin     0 24 sept. 16:48 index.html
-drwx------. 2 root      root      16384 24 sept. 14:31 lost+found
+[cbenjamin@node2 ~]$ curl -L node1.tp1.b2/site2
+index du deuxième site
 [cbenjamin@node2 ~]$
 ```
+
+on va le refaire mais en https :
+
+__site 1__:
+```
+[cbenjamin@node2 ~]$ curl -kL https://node1.tp1.b2/site1
+index du premier site
+[cbenjamin@node2 ~]$   
+```
+
+__site 2__:
+```
+[cbenjamin@node2 ~]$ curl -kL https://node1.tp1.b2/site2
+index du deuxième site
+[cbenjamin@node2 ~]$
+```
+donc on vient de prouver que node 2 peut joindre les sites en http et https
