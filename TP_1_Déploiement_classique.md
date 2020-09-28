@@ -511,6 +511,7 @@ je vais créer le fichier du script, un dossier sauvegarde et enfin deux dossier
 site1  site2
 [cbenjamin@node1 sauvegarde]$
 ```
+voir le script sur le git
 
 ### III. Monitoring, alerting
 
