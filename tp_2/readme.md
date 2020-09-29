@@ -105,4 +105,8 @@ t'as pas mis de soleil
 
 ## III. Multi-node deployement
 
+ok ducou j'ai fait un vagrantfile que tu trouvera dans part_3
+
+la c'est les vérifs sur les vms 
+
 
