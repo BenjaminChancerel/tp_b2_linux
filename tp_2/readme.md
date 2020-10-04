@@ -1,4 +1,4 @@
-# TP 2 : Déploiement automatisé 
+q  # TP 2 : Déploiement automatisé 
 
 ## I. Déploiement simple
 
@@ -109,7 +109,7 @@ ok ducou j'ai fait un vagrantfile que tu trouvera dans part_3
 
 la c'est les vérifs sur les vms 
 
-__pour node1 : ___
+__pour node1 :__
 
 ip locale :
 
@@ -152,7 +152,7 @@ Swap:          2047           0        2047
 [vagrant@node1 ~]$
 ```
 
-__pour node2 : ___
+__pour node2 :__
 
 
 pour l'ip locale :
