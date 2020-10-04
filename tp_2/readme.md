@@ -2,6 +2,8 @@ q  # TP 2 : Déploiement automatisé
 
 ## I. Déploiement simple
 
+[part1](./part_1)
+
 tema le vagrantfile : 
 ```
 
@@ -105,6 +107,8 @@ t'as pas mis de soleil
 
 ## III. Multi-node deployement
 
+[part3](./part_3)
+
 ok ducou j'ai fait un vagrantfile que tu trouvera dans part_3
 
 la c'est les vérifs sur les vms 
@@ -197,3 +201,4 @@ Swap:          2047          23        2024
 
 ## IV. Automation here we (slowly) come
 
+[part4](./part4)

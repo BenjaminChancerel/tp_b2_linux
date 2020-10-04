@@ -30,48 +30,42 @@ error_log nginx_error.log;
 events {
     worker_connections 1024;
 }
+
 http {
      server {
-       listen 80;
-        server_name node1.tp1.b2;
+        listen 80;
+
+        server_name node1.tp2.b2;
+
         location / {
                 return 301 /site1;
         }
+
         location /site1 {
                 alias /srv/site1;
         }
+
         location /site2 {
                 alias /srv/site2;
         }
 }
+
 server {
         listen 443 ssl;
+
         server_name node1.tp2.b2;
         ssl_certificate server.crt;
         ssl_certificate_key server.key;
+
         location / {
             return 301 /site1;
         }
+
         location /site1 {
             alias /srv/site1;
         }
         location /site2 {
             alias /srv/site2;
-        }
-        location ~ /netdata/(?<ndpath>.*) {
-            proxy_redirect off;
-            proxy_set_header Host \$host;
-            proxy_set_header X-Forwarded-Host \$host;
-            proxy_set_header X-Forwarded-Server \$host;
-            proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-            proxy_http_version 1.1;
-            proxy_pass_request_headers on;
-            proxy_set_header Connection 'keep-alive';
-            proxy_store off;
-            proxy_pass http://netdata/\$ndpath\$is_args\$args;
-            gzip on;
-            gzip_proxied any;
-            gzip_types *;
         }
     }
 }" >> /etc/nginx/nginx.conf
