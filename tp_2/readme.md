@@ -1,4 +1,4 @@
-q  # TP 2 : Déploiement automatisé 
+# TP 2 : Déploiement automatisé 
 
 ## I. Déploiement simple
 
