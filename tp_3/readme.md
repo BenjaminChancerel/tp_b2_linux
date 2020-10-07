@@ -9,8 +9,11 @@ sommaire :
     *   [2. Analyse d'un service](###-2-:-Analyse-d'un-service)
     *   [3. Création d'un service](###-3-:-Création-d'un-service)
         *   [A. Serveur web](####-A-:-Serveur-web)
-        *   [B. Sauvegrade](####-B-:-Sauvegrade)       
-
+        *   [B. Sauvegrade](####-B-:-Sauvegrade)     
+*   [II. Autres features](##-II-:-Autres-features)
+    *   [1. Gestion boot](###-1-:-Gestion-de-boot)
+    *   [2. Gestion de l'heure](###-2-:-Gestion-de-l'heure)
+    *   [3. Gestion des noms et de la résolution des noms](###-3-:-Gestion-des-noms-et-de-la-résolution-de-noms)
 ## I : Services systemd
 
 ### 1 : Intro
@@ -230,5 +233,104 @@ je split donc le script en trois script comme demandés :
 
 tu les retrouves dans _[file](./file)_
 
+à continuer plus tard 
+
+## II : Autres features 
+
+### 1 : Gestion de boot
+
+voici la commande que j'ai rentrer pour obtenir le diagramme de boot dans un fichier .svg : `` sudo systemd-analyze plot >bootup.svg     ``
 
 
+je vois ur le diagramme que les 3 services les plus lents à demarrer sont :
+
+*   __kdump.service__ : _168ms_
+*   __rsyslog.service__ : _77ms_
+*   __rpc-statd-notify.service__ : _37ms_
+
+### 2 : Gestion de l'heure
+
+```
+[vagrant@tplinux3 ~]$ timedatectl
+               Local time: Wed 2020-10-07 19:49:46 UTC
+           Universal time: Wed 2020-10-07 19:49:46 UTC
+                 RTC time: Wed 2020-10-07 19:49:43
+                Time zone: UTC (UTC, +0000)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
+[vagrant@tplinux3 ~]$
+```
+
+``Time zone: UTC (UTC, +0000)`` : voici la ligne qui m'indique mon fuseau horaire, le fuseau du méridien de Greenwich
+
+``NTP service: active`` : le on peut lire que je suis synchro avec un serveur __NTP__
+
+*   Pour changer mon fuseau horaire :
+
+    *   D'abord je liste les fuseaux horaires avec ``timedatectl list-timezones`` 
+    *   je repère ``Europe/Paris``
+    *   et je rentre la commande ``sudo timedatectl set-timezone Europe/Paris``
+
+on vérifie le fuseau : 
+
+```
+[vagrant@tplinux3 ~]$ timedatectl
+               Local time: Wed 2020-10-07 21:59:04 CEST
+           Universal time: Wed 2020-10-07 19:59:04 UTC
+                 RTC time: Wed 2020-10-07 19:59:02
+                Time zone: Europe/Paris (CEST, +0200)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
+[vagrant@tplinux3 ~]$
+```
+
+on constate que l'heure locale à pris 2h 
+normale on est en france heure d'été tu connais 
+
+### 3 : Gestion des noms et de la résolution de noms
+
+```
+[vagrant@tplinux3 ~]$ hostnamectl
+   Static hostname: tplinux3
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: dc4157234e15404d927c7e1535b42b44
+           Boot ID: c5c743696c6e4f609126de20f273cc35
+    Virtualization: oracle
+  Operating System: CentOS Linux 8 (Core)
+       CPE OS Name: cpe:/o:centos:centos:8
+            Kernel: Linux 4.18.0-80.el8.x86_64
+      Architecture: x86-64
+[vagrant@tplinux3 ~]$ hostnamectl
+   Static hostname: tplinux3
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: dc4157234e15404d927c7e1535b42b44
+           Boot ID: c5c743696c6e4f609126de20f273cc35
+    Virtualization: oracle
+  Operating System: CentOS Linux 8 (Core)
+       CPE OS Name: cpe:/o:centos:centos:8
+            Kernel: Linux 4.18.0-80.el8.x86_64
+      Architecture: x86-64
+```
+
+Mon hostname actuel : __``Static hostname: tplinux3``__
+
+```
+[vagrant@tplinux3 ~]$ sudo hostnamectl set-hostname LeRoiDRoux
+[vagrant@tplinux3 ~]$ hostnamectl
+   Static hostname: LeRoiDRoux
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: dc4157234e15404d927c7e1535b42b44
+           Boot ID: c5c743696c6e4f609126de20f273cc35
+    Virtualization: oracle
+  Operating System: CentOS Linux 8 (Core)
+       CPE OS Name: cpe:/o:centos:centos:8
+            Kernel: Linux 4.18.0-80.el8.x86_64
+      Architecture: x86-64
+[vagrant@tplinux3 ~]$
+```
+et op on a changé le hostname 

@@ -1,0 +1,16 @@
+[Unit]
+Description=backup service for leo's tp
+
+[Service]
+Type=oneshot
+Environment="PREBACKUP=/etc/systemd/system/prebackup.sh"
+Environment="BACKUP=/etc/systemd/system/backup.sh"
+Environment="POSTBACKUP=/etc/systemd/system/postbackup.sh"
+User=backup
+PIDFILE=/var/run/backup.pid
+ExecStartPre=/usr/bin/sh ${PREBACKUP}
+ExecStart=/usr/bin/sh ${BACKUP}
+ExecStartPost=/usr/bin/sh ${POSTBAKUP}
+
+[Install]
+WantedBy=multi-user.target
