@@ -219,7 +219,7 @@ carré dans l'axe
 #### B : Sauvegarde 
 
 comme tu as surement pu le voire, j'ai pas réussi à faire de script au tp 1.
-Donc je vais utiliser celui de quelqu'un d'autre (celui de thomas : merci thomas)
+Donc je vais utiliser celui de quelqu'un d'autre (le tiens :) )
 
 tu peux le retouvre dans [file](./file)
 
