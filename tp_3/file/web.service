@@ -1,0 +1,13 @@
+[Unit]
+Description=web server for leo's tp 
+
+[Service]
+Type=simple
+user=nginx
+Environment="PORT=8080"
+ExecStartPre=+/usr/bin/firewalld --add-port=${PORT}/tcp 
+ExecStart=/usr/bin/python3 -m http.server ${PORT}
+ExecStop=+/usr/bin/firewalld --remove-port=${PORT}/tcp
+
+[Install]
+WantedBy=multi-user.target
