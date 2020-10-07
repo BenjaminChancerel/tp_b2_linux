@@ -143,10 +143,10 @@ WantedBy=multi-user.target
 [vagrant@tp3 system]$
 ```
 
-voire le fichier en détail sur [file](./file)
+voire le fichier en détail sur _[file](./file)_
 
 
-on va tester avec un curl :
+on va tester avec un __curl__ :
 
 ```
 [vagrant@tp3 system]$ curl 192.168.2.11:8080
@@ -188,7 +188,7 @@ on va tester avec un curl :
 ```
 ça marche zebi 
 
-on va vérif encore avec un status :
+on va vérif encore avec un __status__ :
 
 ```
 [vagrant@tp3 ~]$ sudo systemctl status web
@@ -206,7 +206,7 @@ Oct 07 13:17:52 tp3 systemd[1]: Started web server for leo's tp.
 Hint: Some lines were ellipsized, use -l to show in full.
 ```
 
-maintenant on va faire en sorte que le system d'allume au démarrage de ma machine :
+maintenant on va faire en sorte que le system __s'allume au démarrage de ma machine__ :
 
 ```
 [vagrant@tp3 ~]$ sudo systemctl enable web
@@ -221,14 +221,14 @@ carré dans l'axe
 comme tu as surement pu le voire, j'ai pas réussi à faire de script au tp 1.
 Donc je vais utiliser celui de quelqu'un d'autre (le tiens :) )
 
-tu peux le retouvre dans [file](./file)
+tu peux le retouvrer dans _[file](./file)_
 
 je split donc le script en trois script comme demandés :
-_prebackup.sh_
-_backup.sh_
-_postbackup.sh_
+*   _prebackup.sh_
+*   _backup.sh_
+*   _postbackup.sh_
 
-tu les retrouves dans [file](./file)
+tu les retrouves dans _[file](./file)_
 
 
 
