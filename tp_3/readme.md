@@ -222,7 +222,7 @@ carré dans l'axe
 #### B : Sauvegarde 
 
 comme tu as surement pu le voire, j'ai pas réussi à faire de script au tp 1.
-Donc je vais utiliser celui de quelqu'un d'autre (le tiens :) )
+Donc je vais utiliser celui de quelqu'un d'autre (celui de gauthier :) cimer le gaut )
 
 tu peux le retouvrer dans _[file](./file)_
 
@@ -233,7 +233,13 @@ je split donc le script en trois script comme demandés :
 
 tu les retrouves dans _[file](./file)_
 
-à continuer plus tard 
+tu retrouveras aussi le fichier _backup.service_ 
+
+je ne sais pas pk j'ai une erreur invalid argument que je n'arrive pas à régler ... donc je ne l'ai pas tester.
+
+donc soit ça marche pour toi soit bah ... 💩
+
+j'ai quand même fait un backup.timer
 
 ## II : Autres features 
 
@@ -334,3 +340,7 @@ Mon hostname actuel : __``Static hostname: tplinux3``__
 [vagrant@tplinux3 ~]$
 ```
 et op on a changé le hostname 
+
+
+
+BISOUS

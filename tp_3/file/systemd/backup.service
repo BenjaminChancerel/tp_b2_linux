@@ -8,9 +8,9 @@ Environment="BACKUP=/etc/systemd/system/backup.sh"
 Environment="POSTBACKUP=/etc/systemd/system/postbackup.sh"
 User=backup
 PIDFILE=/var/run/backup.pid
-ExecStartPre=/usr/bin/sh ${PREBACKUP}
-ExecStart=/usr/bin/sh ${BACKUP}
-ExecStartPost=/usr/bin/sh ${POSTBAKUP}
+ExecStartPre=sudo ${PREBACKUP}
+ExecStart=sudo  ${BACKUP}
+ExecStartPost=sudo ${POSTBAKUP}
 
 [Install]
 WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Execute backup every hour relative to when the machine was booted up
+
+[Timer]
+OnCalendar=*-*-* *:00:00
+
+[Install]
+WantedBy=multi-user.target
